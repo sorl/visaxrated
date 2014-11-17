@@ -1,4 +1,3 @@
-import datetime
 import requests
 from bs4 import BeautifulSoup as Soup
 
@@ -25,12 +24,15 @@ class VisaxratedException(Exception):
     pass
 
 
-def get_rate(card, trans, fee, date, amount):
+def xrate(card, trans, fee, date, amount):
+    """
+    Returns the exchenge rate (amount) from Visa.
+    """
     if card not in CURRENCIES:
         raise VisaxratedException('Card currency %s not available.' % card)
     if trans not in CURRENCIES:
         raise VisaxratedException('Transaction currency %s not available.' % trans)
-    date = '17/11/2014'
+    date = date.strftime('%d/%m/%Y')
     data = {
         '__EVENTTARGET': '',
         '__EVENTARGUMENT': '',
@@ -43,17 +45,23 @@ def get_rate(card, trans, fee, date, amount):
         'ctl00$ctl00$MainContent$MainContent$ctl00$txtAmount': amount,
         'ctl00$ctl00$MainContent$MainContent$ctl00$ctl02': '',
     }
-    r = requests.get(RATES_URL)
+    headers = {
+        'Referer': RATES_URL,
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.122 Safari/537.36',
+    }
+    r = requests.get(RATES_URL, headers=headers)
     soup = Soup(r.text)
     form = soup.find('form', {'id': 'form1'})
-    data = {}
     for inp in form.find_all('input', {'type': 'hidden'}):
         data[inp['id']] = inp['value']
-    r = requests.post(RATES_URL, data=data)
-    return r.text.encode('utf8')
+    r = requests.post(RATES_URL, data=data, headers=headers)
+    soup = Soup(r.text)
+    main = soup.find('main')
+    div = main.find_all('div', {'class': 'col-lg-12'})[1]
+    return float(div.find_all('strong')[1].text)
 
 
-def get_currencies():
+def currencies():
     """
     Returns a list of tuples with ( Currency(3-letter capital), Readable name )
     of all availabale currencies
@@ -66,7 +74,3 @@ def get_currencies():
         if opt.string:
             currs.append((opt['value'], opt.string))
     return currs
-
-
-if __name__ == '__main__':
-    print get_rate('SEK', 'USD', 1.65, datetime.date(year=2014, month=11, day=17), 123)
