@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='visaxrated',
-    version='0.1',
+    version='0.1.1',
     description='Get exchange rates for Visa.',
     long_description=open('README.rst').read(),
     author='Mikko Hellsing',

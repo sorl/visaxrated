@@ -58,7 +58,7 @@ def xrate(card, trans, fee, date, amount):
     soup = Soup(r.text)
     main = soup.find('main')
     div = main.find_all('div', {'class': 'col-lg-12'})[1]
-    return float(div.find_all('strong')[1].text)
+    return float(div.find_all('strong')[1].text.replace(',', ''))
 
 
 def currencies():
