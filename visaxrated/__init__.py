@@ -43,19 +43,19 @@ def xrate(card, trans, fee, date, amount):
         'ctl00$ctl00$MainContent$MainContent$ctl00$txtFee': fee,
         'ctl00$ctl00$MainContent$MainContent$ctl00$txtDate': date,
         'ctl00$ctl00$MainContent$MainContent$ctl00$txtAmount': amount,
-        'ctl00$ctl00$MainContent$MainContent$ctl00$ctl02': '',
+        'ctl00$ctl00$MainContent$MainContent$ctl00$btnSubmit': '',
     }
     headers = {
         'Referer': RATES_URL,
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.122 Safari/537.36',
     }
     r = requests.get(RATES_URL, headers=headers)
-    soup = Soup(r.text)
+    soup = Soup(r.text, 'html.parser')
     form = soup.find('form', {'id': 'form1'})
     for inp in form.find_all('input', {'type': 'hidden'}):
         data[inp['id']] = inp['value']
     r = requests.post(RATES_URL, data=data, headers=headers)
-    soup = Soup(r.text)
+    soup = Soup(r.text, 'html.parser')
     main = soup.find('main')
     div = main.find_all('div', {'class': 'col-lg-12'})[1]
     return float(div.find_all('strong')[1].text.replace(',', ''))

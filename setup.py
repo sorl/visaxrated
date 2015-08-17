@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='visaxrated',
-    version='0.1.1',
+    version='0.2.0',
     description='Get exchange rates for Visa.',
     long_description=open('README.rst').read(),
     author='Mikko Hellsing',
@@ -11,7 +11,7 @@ setup(
     license='BSD',
     url='https://github.com/aino/visaxrated',
     packages=['visaxrated'],
-    install_requires=['beautifulsoup4>=4.3.2', 'requests>=2.4.3'],
+    install_requires=['beautifulsoup4>=4.4.0', 'requests>=2.7.0'],
     zip_safe=False,
     classifiers=[
         'Development Status :: 3 - Alpha',
