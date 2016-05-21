@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup as Soup
 
 
-RATES_URL = 'http://www.visaeurope.com/making-payments/exchange-rates'
+RATES_URL = 'https://www.visaeurope.com/making-payments/exchange-rates'
 CURRENCIES = ('AFN', 'ALL', 'DZD', 'AOA', 'ARS', 'AMD', 'AWG', 'AUD', 'AZN',
 'BSD', 'BHD', 'BDT', 'BBD', 'BYR', 'BZD', 'BMD', 'BTN', 'BOB', 'BAM', 'BWP',
 'BRL', 'GBP', 'BND', 'BGN', 'BIF', 'KHR', 'CAD', 'CVE', 'KYD', 'XOF', 'XAF',
